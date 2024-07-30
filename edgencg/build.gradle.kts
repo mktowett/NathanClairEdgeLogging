@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlinKsp)
-    alias(libs.plugins.hiltAndroid)
+    alias(libs.plugins.hilt)
+    kotlin("kapt")
 }
 
 android {
@@ -46,9 +46,17 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    //timber
+    implementation(libs.timber)
 
     //retrofit
     implementation(libs.retrofit)
@@ -58,10 +66,20 @@ dependencies {
     testImplementation(libs.mockk)
     androidTestImplementation(libs.mockkAndroid)
 
-    // Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
+    //room
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
 
-    //timber
-    implementation(libs.timber)
+    //coroutines
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
+
+    //work manager
+    implementation(libs.work.runtime)
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

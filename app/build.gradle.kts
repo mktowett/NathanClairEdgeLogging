@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlinKsp)
-    alias(libs.plugins.hiltAndroid)
+    alias(libs.plugins.hilt)
+    kotlin("kapt")
 }
 
 android {
@@ -68,6 +68,26 @@ dependencies {
 
     //hilt
     implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
+    kapt(libs.hilt.compiler)
 
+    //room
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
+
+    //coroutines
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
+
+    //timber
+    implementation(libs.timber)
+
+    //work manager
+    implementation(libs.work.runtime)
+
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
