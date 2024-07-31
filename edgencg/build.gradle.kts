@@ -14,7 +14,6 @@ android {
         minSdk = 24
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-        buildConfigField( "String", "BASE_URL", "\"https://api.thescout.app/\"")
     }
 
     buildTypes {
@@ -24,7 +23,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField( "String", "BASE_URL", "\"https://api.thescout.app/\"")
         }
     }
     compileOptions {

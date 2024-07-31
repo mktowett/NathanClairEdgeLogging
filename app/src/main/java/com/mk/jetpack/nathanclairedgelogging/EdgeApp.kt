@@ -1,9 +1,11 @@
 package com.mk.jetpack.nathanclairedgelogging
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.mk.jetpack.edgencg.EdgeLoggingTree
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -18,6 +20,8 @@ class EdgeApp : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        // Initialize Timber with the custom tree
+        Timber.plant(edgeLoggingTree)
     }
 
     override fun getWorkManagerConfiguration()=

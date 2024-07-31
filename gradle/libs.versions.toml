@@ -20,6 +20,7 @@ coroutines = "1.7.3"
 work = "2.8.0"
 kotlinx-serialization-json = "1.4.1"
 hiltCommon = "1.2.0"
+hiltWork = "1.2.0"
 
 
 [libraries]
@@ -71,6 +72,7 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 #serialization
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
+androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
 
 
 [plugins]
