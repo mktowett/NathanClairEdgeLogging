@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.hilt)
     kotlin("kapt")
 }
@@ -16,7 +17,6 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -69,6 +69,7 @@ dependencies {
     //hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.common)
 
     //room
     implementation(libs.room.runtime)
@@ -84,6 +85,9 @@ dependencies {
 
     //work manager
     implementation(libs.work.runtime)
+
+    // kotlinx serialization
+    implementation(libs.kotlinx.serialization.json)
 
 }
 

@@ -1,0 +1,31 @@
+package com.mk.jetpack.edgencg.data.model
+
+data class BuildInfo(
+    val board: String,
+    val bootloader: String,
+    val brand: String,
+    val cpuAbi: String,
+    val cpuAbi2: String,
+    val device: String,
+    val display: String,
+    val fingerprint: String,
+    val hardware: String,
+    val host: String,
+    val id: String,
+    val isDebuggable: Boolean,
+    val isEmulator: Boolean,
+    val manufacturer: String,
+    val model: String,
+    val permissionsReviewRequired: Boolean,
+    val product: String,
+    val radio: String?,
+    val supported32BitAbis: List<String>,
+    val supported64BitAbis: List<String>,
+    val supportedAbis: List<String>,
+    val tags: String,
+    val time: Long,
+    val type: String,
+    val unknown: String,
+    val user: String,
+    val version: VersionInfo
+)

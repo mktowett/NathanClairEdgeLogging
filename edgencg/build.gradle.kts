@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.hilt)
     kotlin("kapt")
 }
@@ -11,9 +12,9 @@ android {
 
     defaultConfig {
         minSdk = 24
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        buildConfigField( "String", "BASE_URL", "\"https://api.thescout.app/\"")
     }
 
     buildTypes {
@@ -23,6 +24,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField( "String", "BASE_URL", "\"https://api.thescout.app/\"")
         }
     }
     compileOptions {
@@ -46,6 +48,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.hilt.common)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -61,6 +64,7 @@ dependencies {
     //retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofitConverterGson)
+    implementation(libs.okhttp.lib)
 
     //mockk testing
     testImplementation(libs.mockk)
@@ -77,6 +81,9 @@ dependencies {
 
     //work manager
     implementation(libs.work.runtime)
+
+    // kotlinx serialization
+    implementation(libs.kotlinx.serialization.json)
 }
 
 // Allow references to generated code
