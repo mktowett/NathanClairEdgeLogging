@@ -2,7 +2,7 @@ package com.mk.jetpack.edgencg
 
 import timber.log.Timber
 
-object EdgeLogger {
+object Edge {
     fun d(message: String) {
         Timber.d(message)
     }

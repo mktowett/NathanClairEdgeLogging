@@ -14,11 +14,11 @@ timber = "5.0.1"
 retrofit = "2.9.0"
 mockk = "1.13.5"
 okhttp = "4.11.0"
-hilt = "2.47"
 room = "2.5.0"
 coroutines = "1.7.3"
 work = "2.8.0"
 kotlinx-serialization-json = "1.4.1"
+hilt = "2.47"
 hiltCommon = "1.2.0"
 hiltWork = "1.2.0"
 
@@ -58,6 +58,8 @@ mockkAndroid = { group = "io.mockk", name = "mockk-android", version.ref = "mock
 #hilt
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
+androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
 
 
 #room
@@ -71,8 +73,6 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 
 #serialization
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
-androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
-androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
 
 
 [plugins]

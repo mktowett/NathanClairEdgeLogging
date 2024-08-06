@@ -24,8 +24,8 @@ class EdgeApp : Application(), Configuration.Provider {
         Timber.plant(edgeLoggingTree)
     }
 
-    override fun getWorkManagerConfiguration()=
+    override fun getWorkManagerConfiguration() =
         Configuration.Builder()
-        .setWorkerFactory(workerFactory)
-        .build()
+            .setWorkerFactory(workerFactory)
+            .build()
 }

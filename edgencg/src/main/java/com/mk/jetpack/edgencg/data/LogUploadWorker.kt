@@ -2,19 +2,25 @@ package com.mk.jetpack.edgencg.data
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker
+import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.google.gson.Gson
+import com.mk.jetpack.edgencg.Edge
 import com.mk.jetpack.edgencg.data.model.DeviceInfo
 import com.mk.jetpack.edgencg.network.LogUploadService
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
-
+import javax.inject.Inject
 /**
  * @project :
  * @author  : mktowett
@@ -25,25 +31,26 @@ import java.io.IOException
  */
 
 @HiltWorker
-class LogUploadWorker @AssistedInject constructor(
-    @Assisted context: Context,
-    @Assisted workerParams: WorkerParameters,
+class LogUploadWorker @Inject constructor(
+    @ApplicationContext private val context: Context,
+    workerParams: WorkerParameters,
     private val logUploadService: LogUploadService,
     private val deviceInfoCollector: DeviceInfoCollector
-) : Worker(context, workerParams) {
+) : CoroutineWorker(context, workerParams) {
 
-    override fun doWork(): Result {
-        val logFile = File(applicationContext.filesDir, "logs.txt")
-        return try {
-            // Implement logic to upload log file to server
-            // After successful upload, delete or clear the file
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        val logFile = File(context.filesDir, "logs.txt")
+        return@withContext try {
             if (logFile.exists()) {
-                // Dummy server upload code (replace with actual implementation)
-                // server.upload(logFile)
+                val deviceInfo = deviceInfoCollector.collect()
+                uploadLogFile(logFile, deviceInfo)
                 logFile.delete()
+                Result.success()
+            } else {
+                Result.failure()
             }
-            Result.success()
         } catch (e: Exception) {
+            Timber.e(e, "Failed to upload log file")
             Result.failure()
         }
     }
