@@ -1,31 +1,17 @@
 package com.mk.jetpack.nathanclairedgelogging
 
 import android.app.Application
-import androidx.hilt.work.HiltWorkerFactory
-import androidx.work.Configuration
-import com.mk.jetpack.edgencg.EdgeLoggingTree
-import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
-import javax.inject.Inject
+import com.mk.jetpack.edgencg.logging.EdgeNCGLogger
 
 
-@HiltAndroidApp
-class EdgeApp : Application(), Configuration.Provider {
+class EdgeApp : Application(){
 
-    @Inject
-    lateinit var workerFactory: HiltWorkerFactory
-
-    @Inject
-    lateinit var edgeLoggingTree: EdgeLoggingTree
+    lateinit var edgeNCGLogger: EdgeNCGLogger
 
     override fun onCreate() {
         super.onCreate()
-        // Initialize Timber with the custom tree
-        Timber.plant(edgeLoggingTree)
+        edgeNCGLogger = EdgeNCGLogger(this)
+
     }
 
-    override fun getWorkManagerConfiguration() =
-        Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
 }

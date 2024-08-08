@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofitConverterGson)
     implementation(libs.okhttp.lib)
+    implementation(libs.logging.interceptor.lib)
 
     //mockk testing
     testImplementation(libs.mockk)

@@ -16,11 +16,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.mk.jetpack.edgencg.Edge
+import com.mk.jetpack.edgencg.logging.EdgeNCGLogger
 import com.mk.jetpack.nathanclairedgelogging.ui.theme.NathanClairEdgeLoggingTheme
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var edgeNCGLogger: EdgeNCGLogger
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        edgeNCGLogger = (application as EdgeApp).edgeNCGLogger
         enableEdgeToEdge()
         setContent {
             NathanClairEdgeLoggingTheme {
