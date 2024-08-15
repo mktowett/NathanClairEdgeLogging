@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.dokka)
     kotlin("kapt")
 }
 
@@ -38,6 +39,10 @@ android {
             excludes.add("/META-INF/AL2.0")
             excludes.add("/META-INF/LGPL2.1")
         }
+    }
+
+    subprojects {
+        apply(plugin = "org.jetbrains.dokka")
     }
 }
 
@@ -83,6 +88,9 @@ dependencies {
 
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
+
+    //dokka
+    dokkaPlugin(libs.dokka.android)
 }
 
 // Allow references to generated code

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.dokka)
     kotlin("kapt")
 }
 
@@ -90,6 +91,10 @@ dependencies {
 
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
+
+    //dokka
+    dokkaPlugin(libs.dokka.android)
+
 
 }
 
