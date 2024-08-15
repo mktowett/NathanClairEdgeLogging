@@ -8,8 +8,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.mk.jetpack.edgencg.Edge
-import com.mk.jetpack.edgencg.data.DeviceInfoCollector
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 /**
@@ -23,20 +21,12 @@ import java.util.concurrent.TimeUnit
 
 class EdgeNCGLogger(private val context: Context) {
 
-    private val logFileHandler = LogFileHandler(context)
-    private val deviceInfoCollector = DeviceInfoCollector(context)
-
     init {
         // Initialize Timber
         Edge.init()
         // Send the first set of logs immediately
         sendLogsImmediately()
         scheduleLogUpload()
-    }
-
-    fun logMessage(message: String) {
-        Timber.d(message)
-        logFileHandler.writeLog(message)
     }
 
     private fun sendLogsImmediately() {
