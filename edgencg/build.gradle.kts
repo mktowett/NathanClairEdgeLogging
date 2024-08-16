@@ -109,10 +109,12 @@ afterEvaluate {
             create("release", MavenPublication::class) {
                 from(components["release"])
 
-                groupId = "com.mk.jetpack.edgencg"
+                groupId = "com.github.mkowett"
                 artifactId = "edgencg"
                 version = "1.0.0"
             }
         }
     }
 }
+
+//com.mk.jetpack.nathanclairedgelogging
