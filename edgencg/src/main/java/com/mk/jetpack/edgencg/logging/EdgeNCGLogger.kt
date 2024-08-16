@@ -8,8 +8,9 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.mk.jetpack.edgencg.Edge
-import com.mk.jetpack.edgencg.data.DeviceInfoCollector
-import timber.log.Timber
+import com.mk.jetpack.edgencg.crash.CrashHandler
+import com.mk.jetpack.edgencg.data.preferences.DevicePreferences
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
 
 /**
@@ -23,20 +24,24 @@ import java.util.concurrent.TimeUnit
 
 class EdgeNCGLogger(private val context: Context) {
 
-    private val logFileHandler = LogFileHandler(context)
-    private val deviceInfoCollector = DeviceInfoCollector(context)
-
     init {
+        initializeDeviceId()
         // Initialize Timber
         Edge.init()
+        // Initialize the crash handler to capture crashes
+        CrashHandler.init(context)
         // Send the first set of logs immediately
         sendLogsImmediately()
         scheduleLogUpload()
     }
 
-    fun logMessage(message: String) {
-        Timber.d(message)
-        logFileHandler.writeLog(message)
+    private fun initializeDeviceId() {
+        val devicePreferences = DevicePreferences(context)
+        // Initialize and store the device ID if it doesn't exist
+        runBlocking {
+            val deviceId = devicePreferences.initDeviceId()
+            println("Device ID initialized: $deviceId") // You can log or store this as needed
+        }
     }
 
     private fun sendLogsImmediately() {

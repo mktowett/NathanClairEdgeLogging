@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.dokka)
+    id("maven-publish")
     kotlin("kapt")
 }
 
@@ -39,6 +41,10 @@ android {
             excludes.add("/META-INF/LGPL2.1")
         }
     }
+
+    subprojects {
+        apply(plugin = "org.jetbrains.dokka")
+    }
 }
 
 dependencies {
@@ -49,6 +55,7 @@ dependencies {
     implementation(libs.androidx.hilt.common)
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
@@ -83,9 +90,29 @@ dependencies {
 
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
+
+    //dokka
+    dokkaPlugin(libs.dokka.android)
+
+    //datastore
+    implementation(libs.datastore.preferences)
 }
 
 // Allow references to generated code
 kapt {
     correctErrorTypes = true
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create("release", MavenPublication::class) {
+                from(components["release"])
+
+                groupId = "com.mk.jetpack.edgencg"
+                artifactId = "edgencg"
+                version = "1.0.0"
+            }
+        }
+    }
 }
