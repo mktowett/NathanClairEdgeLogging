@@ -8,6 +8,8 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.mk.jetpack.edgencg.Edge
+import com.mk.jetpack.edgencg.data.preferences.DevicePreferences
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
 
 /**
@@ -22,11 +24,21 @@ import java.util.concurrent.TimeUnit
 class EdgeNCGLogger(private val context: Context) {
 
     init {
+        initializeDeviceId()
         // Initialize Timber
         Edge.init()
         // Send the first set of logs immediately
         sendLogsImmediately()
         scheduleLogUpload()
+    }
+
+    private fun initializeDeviceId() {
+        val devicePreferences = DevicePreferences(context)
+        // Initialize and store the device ID if it doesn't exist
+        runBlocking {
+            val deviceId = devicePreferences.initDeviceId()
+            println("Device ID initialized: $deviceId") // You can log or store this as needed
+        }
     }
 
     private fun sendLogsImmediately() {

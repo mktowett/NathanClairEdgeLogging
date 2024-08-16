@@ -91,6 +91,9 @@ dependencies {
 
     //dokka
     dokkaPlugin(libs.dokka.android)
+
+    //datastore
+    implementation(libs.datastore.preferences)
 }
 
 // Allow references to generated code

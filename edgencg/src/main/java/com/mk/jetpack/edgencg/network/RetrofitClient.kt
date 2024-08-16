@@ -9,8 +9,6 @@ private const val BASE_URL = "http://74.235.108.48:80/"
 
 object RetrofitClient {
 
-    private const val BASE_URL = "http://74.235.108.48:80/"
-
     val instance: LogUploadService by lazy {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
