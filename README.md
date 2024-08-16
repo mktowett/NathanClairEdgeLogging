@@ -37,12 +37,12 @@ To integrate EdgeNCG into your Android project, follow these steps:
    
    ```groovy
    dependencies {
-    implementation 'com.yourorganization:edgencg:1.0.0'
+    implementation 'com.github.mktowett:NathanClairEdgeLogging:Tag'
    }
 
    ```kotlin
    dependencies {
-    implementation("com.yourorganization:edgencg:1.0.0")
+    implementation("com.github.mktowett:NathanClairEdgeLogging:Tag")
    }
    
 4. **Initialize EdgeNCG**
