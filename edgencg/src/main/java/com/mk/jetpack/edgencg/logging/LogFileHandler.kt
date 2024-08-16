@@ -18,7 +18,7 @@ import java.io.PrintWriter
  * @time    : 19:13
  * @file    : LogFileHandler.kt
  */
-class LogFileHandler(private val context: Context) {
+class LogFileHandler(context: Context) {
 
     private val logFile: File = File(context.filesDir, "app_logs.txt")
 

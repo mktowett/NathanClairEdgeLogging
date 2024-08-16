@@ -8,6 +8,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.mk.jetpack.edgencg.Edge
+import com.mk.jetpack.edgencg.crash.CrashHandler
 import com.mk.jetpack.edgencg.data.preferences.DevicePreferences
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
@@ -27,6 +28,8 @@ class EdgeNCGLogger(private val context: Context) {
         initializeDeviceId()
         // Initialize Timber
         Edge.init()
+        // Initialize the crash handler to capture crashes
+        CrashHandler.init(context)
         // Send the first set of logs immediately
         sendLogsImmediately()
         scheduleLogUpload()

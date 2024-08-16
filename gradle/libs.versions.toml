@@ -89,3 +89,4 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dokka = {id = "org.jetbrains.dokka", version.ref = "dokka"}
+maven-publish = { id = "maven-publish" }
