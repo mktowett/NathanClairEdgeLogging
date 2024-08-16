@@ -8,6 +8,7 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
 import java.io.InputStreamReader
+import java.io.PrintWriter
 
 /**
  * @project :
@@ -88,6 +89,21 @@ class LogFileHandler(private val context: Context) {
             Runtime.getRuntime().exec("logcat -c")
         } catch (e: Exception) {
             Timber.e(e, "Failed to capture system logs")
+        }
+    }
+
+    // New method to write crash logs
+    fun writeCrashLog(throwable: Throwable) {
+        try {
+            FileWriter(logFile, true).use { writer ->
+                val printWriter = PrintWriter(writer)
+                printWriter.println("Crash Report:")
+                printWriter.println("Time: ${System.currentTimeMillis()}")
+                throwable.printStackTrace(printWriter)
+                printWriter.close()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 }
