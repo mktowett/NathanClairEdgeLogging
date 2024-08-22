@@ -22,77 +22,63 @@ class LogFileHandler(context: Context) {
 
     private val logFile: File = File(context.filesDir, "app_logs.txt")
 
+    // Append log to the log file
     fun writeLog(log: String) {
         try {
             FileWriter(logFile, true).use { writer ->
                 writer.append(log).append("\n")
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e, "Failed to write log")
         }
     }
 
+    // Return the log file object for further processing
     fun getLogFile(): File {
-        captureSystemLogs()
         return logFile
     }
 
+    // Check if the log file contains any data
     fun hasLogData(): Boolean {
         return logFile.exists() && logFile.length() > 0
     }
 
+    // Clear the log file content
     fun clearLogFile() {
         try {
             FileWriter(logFile).use { writer ->
-                writer.write("")
+                writer.write("") // Clear the file by overwriting it with an empty string
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e, "Failed to clear log file")
         }
     }
 
-    fun logFileContents() {
+    // Stream log file contents line by line to avoid memory issues
+    fun streamLogFileContents(lineProcessor: (String) -> Unit) {
         if (logFile.exists()) {
             try {
                 BufferedReader(FileReader(logFile)).use { reader ->
-                    val log = StringBuilder()
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
-                        log.append(line).append("\n")
+                        lineProcessor(line ?: "")
                     }
-                    Timber.d("LogFile Contents: \n$log")
                 }
             } catch (e: IOException) {
-                Timber.e(e, "Failed to read log file contents")
+                Timber.e(e, "Failed to stream log file contents")
             }
         } else {
             Timber.d("LogFile does not exist")
         }
     }
 
-    private fun captureSystemLogs() {
-        try {
-            val process = Runtime.getRuntime().exec("logcat -d")
-            val bufferedReader = BufferedReader(InputStreamReader(process.inputStream))
-
-            val log = StringBuilder()
-            var line: String?
-
-            while (bufferedReader.readLine().also { line = it } != null) {
-                log.append(line).append("\n")
-            }
-
-            bufferedReader.close()
-            writeLog(log.toString())
-
-            // Clear the logcat buffer
-            Runtime.getRuntime().exec("logcat -c")
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to capture system logs")
-        }
+    // Check if the log file size exceeds 1MB
+    fun isLogFileSizeExceeded(): Boolean {
+        // 1MB = 1024 * 1024 bytes
+        return logFile.exists() && logFile.length() >= 1 * 1024 * 1024
     }
 
-    // New method to write crash logs
+    // Write crash log details to the log file
     fun writeCrashLog(throwable: Throwable) {
         try {
             FileWriter(logFile, true).use { writer ->
@@ -103,7 +89,8 @@ class LogFileHandler(context: Context) {
                 printWriter.close()
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e, "Failed to write crash log")
         }
     }
 }
+

@@ -45,8 +45,8 @@ class CrashReporter {
         }
 
         private fun triggerLogUpload(context: Context) {
-            val workRequest = OneTimeWorkRequestBuilder<LogUploadWorker>()
-                .setInitialDelay(5, TimeUnit.SECONDS) // Optional delay to give the system time to stabilize
+            val workRequest = OneTimeWorkRequestBuilder<CrashLogUploadWorker>()
+                .setInitialDelay(0, TimeUnit.SECONDS) // Optional delay to give the system time to stabilize
                 .build()
 
             WorkManager.getInstance(context).enqueue(workRequest)

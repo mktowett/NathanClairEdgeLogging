@@ -16,4 +16,12 @@ interface LogUploadService {
         @Part logFile: MultipartBody.Part,
         @PartMap deviceInfo: Map<String, @JvmSuppressWildcards RequestBody>
     ): Response<Void>
+
+    @Multipart
+    @POST("/upload/crashLogs")
+    suspend fun uploadCrashLogs(
+        @Part logFile: MultipartBody.Part,
+        @PartMap deviceInfo: Map<String, @JvmSuppressWildcards RequestBody>
+    ): Response<Void>
+
 }

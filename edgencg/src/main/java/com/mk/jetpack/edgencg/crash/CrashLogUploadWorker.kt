@@ -1,17 +1,16 @@
-package com.mk.jetpack.edgencg.logging
+package com.mk.jetpack.edgencg.crash
 
 import android.content.Context
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.mk.jetpack.edgencg.data.DeviceInfoCollector
 import com.mk.jetpack.edgencg.data.model.DeviceInfo
 import com.mk.jetpack.edgencg.data.preferences.DevicePreferences
+import com.mk.jetpack.edgencg.logging.LogFileHandler
+import com.mk.jetpack.edgencg.logging.toMap
 import com.mk.jetpack.edgencg.network.RetrofitClient
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -21,18 +20,17 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import timber.log.Timber
 import java.io.File
-import java.util.UUID
 
 /**
  * @project :
  * @author  : mktowett
  * @email   : marvintowett@gmail.com
- * @date    : 06/08/2024
- * @time    : 19:50
- * @file    : LogUploadWorker.kt
+ * @date    : 20/08/2024
+ * @time    : 10:10
+ * @file    : CrashLogUploadWorker.kt
  */
 
-class LogUploadWorker(context: Context, workerParams: WorkerParameters) : CoroutineWorker(context, workerParams) {
+class CrashLogUploadWorker(context: Context, workerParams: WorkerParameters) : CoroutineWorker(context, workerParams) {
 
     private val logFileHandler = LogFileHandler(context)
     private val deviceInfoCollector = DeviceInfoCollector(context)
@@ -42,12 +40,16 @@ class LogUploadWorker(context: Context, workerParams: WorkerParameters) : Corout
         return withContext(Dispatchers.IO) {
             try {
                 // Fetch the device ID asynchronously
+                val deviceId = devicePreferences.deviceId.first()
+                Timber.d("device id: $deviceId")
 
+                if (deviceId == null) {
+                    Timber.e("Device ID not found")
+                    return@withContext Result.failure()
+                }
 
                 // Only proceed if log file size exceeds 1MB
-                if (logFileHandler.hasLogData() && logFileHandler.isLogFileSizeExceeded()) {
-                    val deviceId = UUID.randomUUID().toString()
-                    Timber.d("device id: $deviceId")
+                if (logFileHandler.hasLogData()) {
                     val logFile = logFileHandler.getLogFile()
                     val deviceInfo = deviceInfoCollector.collect()
                     val deviceInfoMap = deviceInfo.toMap().toMutableMap()
@@ -83,7 +85,7 @@ class LogUploadWorker(context: Context, workerParams: WorkerParameters) : Corout
                 val logFileRequestBody = logFile.asRequestBody("text/plain".toMediaTypeOrNull())
                 val logFilePart = MultipartBody.Part.createFormData("logFile", logFile.name, logFileRequestBody)
 
-                val response: Response<Void> = RetrofitClient.instance.uploadLogs(logFilePart, deviceInfoMap)
+                val response: Response<Void> = RetrofitClient.instance.uploadCrashLogs(logFilePart, deviceInfoMap)
                 if (response.isSuccessful) {
                     Timber.i("Log file uploaded successfully.")
                     true

@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -15,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.mk.jetpack.edgencg.Edge
 import com.mk.jetpack.edgencg.logging.EdgeNCGLogger
 import com.mk.jetpack.nathanclairedgelogging.ui.theme.NathanClairEdgeLoggingTheme
@@ -57,6 +60,14 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             modifier = modifier
         )
         GenerateLogButton()
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Button(onClick = {
+            throw RuntimeException("This is a forced crash")
+        }) {
+            Text("Crash Button")
+        }
     }
 
 }
@@ -66,6 +77,10 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     NathanClairEdgeLoggingTheme {
         Greeting("Android")
+
+        Button(onClick = { generateLargeLog() }) {
+            Text("Generate 1MB Log")
+        }
     }
 }
 

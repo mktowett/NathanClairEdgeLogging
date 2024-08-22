@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit
 class EdgeNCGLogger(private val context: Context) {
 
     init {
-        initializeDeviceId()
         // Initialize Timber
         Edge.init()
         // Initialize the crash handler to capture crashes
@@ -57,18 +56,28 @@ class EdgeNCGLogger(private val context: Context) {
     }
 
     private fun scheduleLogUpload() {
+        val logFileHandler = LogFileHandler(context)
+
+        // Check if the log file size exceeds 1MB
+        if (logFileHandler.isLogFileSizeExceeded()) {
+            // Trigger immediate upload with OneTimeWorkRequest
+            val uploadWorkRequest = OneTimeWorkRequestBuilder<LogUploadWorker>().build()
+            WorkManager.getInstance(context).enqueue(uploadWorkRequest)
+        }
+
+        // Continue with periodic work to check and upload logs
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val uploadWorkRequest = PeriodicWorkRequestBuilder<LogUploadWorker>(1, TimeUnit.MINUTES)
+        val periodicUploadWorkRequest = PeriodicWorkRequestBuilder<LogUploadWorker>(1, TimeUnit.HOURS) // Increased interval to avoid unnecessary frequent checks
             .setConstraints(constraints)
             .build()
 
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            "LogUploadWork",
+            "PeriodicLogUploadWork",
             ExistingPeriodicWorkPolicy.KEEP,
-            uploadWorkRequest
+            periodicUploadWorkRequest
         )
     }
 }
